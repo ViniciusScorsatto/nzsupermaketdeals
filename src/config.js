@@ -39,7 +39,10 @@ export const config = {
         "https://api-prod.paknsave.co.nz/v1/edge/search/paginated/products",
       storeId:
         process.env.PAKNSAVE_STORE_ID ??
-        "e1925ea7-01bc-4358-ae7c-c6502da5ab12"
+        "e1925ea7-01bc-4358-ae7c-c6502da5ab12",
+      promotionFilter:
+        process.env.PAKNSAVE_PROMOTION_FILTER ??
+        "stores:e1925ea7-01bc-4358-ae7c-c6502da5ab12 AND onPromotion:e1925ea7-01bc-4358-ae7c-c6502da5ab12"
     },
     newworld: {
       url:
@@ -47,12 +50,15 @@ export const config = {
         "https://api-prod.newworld.co.nz/v1/edge/search/paginated/products",
       storeId:
         process.env.NEW_WORLD_STORE_ID ??
-        "60928d93-06fa-4d8f-92a6-8c359e7e846d"
+        "60928d93-06fa-4d8f-92a6-8c359e7e846d",
+      promotionFilter:
+        process.env.NEW_WORLD_PROMOTION_FILTER ??
+        "stores:60928d93-06fa-4d8f-92a6-8c359e7e846d AND onPromotion:60928d93-06fa-4d8f-92a6-8c359e7e846d"
     },
     woolworths: {
       url:
         process.env.WOOLWORTHS_API_URL ??
-        "https://www.woolworths.co.nz/api/v1/products?target=specials&useRankedSpecials=true"
+        "https://www.woolworths.co.nz/api/v1/products?target=specials&useRankedSpecials=true&page=1&pageSize=48"
     }
   },
   storeUrls: {

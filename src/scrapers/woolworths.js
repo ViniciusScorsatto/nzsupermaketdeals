@@ -11,6 +11,8 @@ export class WoolworthsScraper extends BaseStoreScraper {
     const response = await fetch(this.apiUrl, {
       headers: {
         "accept": "application/json",
+        "accept-language": "en-NZ,en;q=0.9",
+        "origin": this.specialsUrl,
         "referer": this.specialsUrl,
         "user-agent": this.userAgent
       }
@@ -21,12 +23,12 @@ export class WoolworthsScraper extends BaseStoreScraper {
     }
 
     const data = await response.json();
-    const products = data.products?.items ?? [];
+    const products = data.products?.items ?? data.products?.products ?? [];
 
     return products
       .map((product) => {
         const name = product.name?.trim();
-        const price = Number(product.price?.salePrice);
+        const price = Number(product.price?.salePrice ?? product.price?.currentPrice ?? product.price?.originalPrice);
         if (!name || !Number.isFinite(price) || price <= 0) {
           return null;
         }

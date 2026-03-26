@@ -11,10 +11,11 @@ function centsToDollars(value) {
 }
 
 export class FoodstuffsApiScraper extends BaseStoreScraper {
-  constructor({ apiUrl, storeId, ...options }) {
+  constructor({ apiUrl, storeId, promotionFilter, ...options }) {
     super(options);
     this.apiUrl = apiUrl;
     this.storeId = storeId;
+    this.promotionFilter = promotionFilter;
   }
 
   buildPayload() {
@@ -30,8 +31,10 @@ export class FoodstuffsApiScraper extends BaseStoreScraper {
           "displayName",
           "singlePrice",
           "promotions",
-          "categoryTrees"
+          "categoryTrees",
+          "productFacets"
         ],
+        filters: this.promotionFilter,
         facets: ["brand", "category0NI", "category1NI", "productFacets", "tobacco"],
         hitsPerPage: 50,
         maxValuesPerFacet: 100,
@@ -63,6 +66,7 @@ export class FoodstuffsApiScraper extends BaseStoreScraper {
         "content-type": "application/json",
         "origin": this.specialsUrl,
         "referer": this.specialsUrl,
+        "accept-language": "en-NZ,en;q=0.9",
         "user-agent": this.userAgent
       },
       body: JSON.stringify(this.buildPayload())
@@ -90,7 +94,10 @@ export class FoodstuffsApiScraper extends BaseStoreScraper {
           name,
           price,
           url: buildStoreSearchUrl(this.storeKey, name),
-          categoryHint: product.categoryTrees?.map((tree) => tree.level0 ?? "").join(" ") ?? ""
+          categoryHint:
+            product.categoryTrees?.map((tree) => tree.level0 ?? "").join(" ") ??
+            product.productFacets?.map((facet) => facet?.name ?? "").join(" ") ??
+            ""
         };
       })
       .filter(Boolean);

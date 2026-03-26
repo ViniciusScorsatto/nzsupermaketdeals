@@ -8,12 +8,14 @@ export function buildScrapers({ storeUrls, storeApis, userAgent }) {
       specialsUrl: storeUrls.paknsave,
       apiUrl: storeApis.paknsave.url,
       storeId: storeApis.paknsave.storeId,
+      promotionFilter: storeApis.paknsave.promotionFilter,
       userAgent
     }),
     new NewWorldScraper({
       specialsUrl: storeUrls.newworld,
       apiUrl: storeApis.newworld.url,
       storeId: storeApis.newworld.storeId,
+      promotionFilter: storeApis.newworld.promotionFilter,
       userAgent
     }),
     new WoolworthsScraper({
