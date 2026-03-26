@@ -1,8 +1,8 @@
 export const BUDGET_PRESETS = [
-  { id: "under_10", label: "Under $10", budget: 10 },
-  { id: "under_15", label: "Under $15", budget: 15 },
-  { id: "under_20", label: "Under $20", budget: 20 },
-  { id: "under_25", label: "Under $25", budget: 25 }
+  { id: "under_10", label: "Under $10", minBudgetExclusive: 0, maxBudgetInclusive: 10 },
+  { id: "budget_10_20", label: "$10-$20", minBudgetExclusive: 10, maxBudgetInclusive: 20 },
+  { id: "budget_20_30", label: "$20-$30", minBudgetExclusive: 20, maxBudgetInclusive: 30 },
+  { id: "budget_30_40", label: "$30-$40", minBudgetExclusive: 30, maxBudgetInclusive: 40 }
 ];
 
 export function getPresetById(presetId) {

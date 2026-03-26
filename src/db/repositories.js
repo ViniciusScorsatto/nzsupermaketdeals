@@ -128,7 +128,7 @@ export async function replaceGeneratedMeals(pool, scrapeRunId, mealsByPreset) {
           preset.label,
           meal.title,
           meal.totalPrice,
-          preset.budget,
+          preset.maxBudgetInclusive,
           meal.score,
           meal.store,
           JSON.stringify(meal.recipeSteps),

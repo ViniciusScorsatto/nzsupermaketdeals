@@ -4,7 +4,7 @@ import { buildMealResponse } from "../src/domain/formatter.js";
 
 test("buildMealResponse renders links, totals, and steps", () => {
   const output = buildMealResponse(
-    { id: "under_10", label: "Under $10", budget: 10 },
+    { id: "under_10", label: "Under $10", minBudgetExclusive: 0, maxBudgetInclusive: 10 },
     [
       {
         title: "Chicken Rice Bowl",

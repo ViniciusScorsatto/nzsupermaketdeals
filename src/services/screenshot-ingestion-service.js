@@ -1,17 +1,15 @@
 import OpenAI from "openai";
+import { buildStoreSearchUrl } from "../utils/store-links.js";
 
 const STORE_META = {
   paknsave: {
-    store: "Pak'nSave",
-    specialsUrl: "https://www.paknsave.co.nz/shop/deals?pg=1"
+    store: "Pak'nSave"
   },
   newworld: {
-    store: "New World",
-    specialsUrl: "https://www.newworld.co.nz/shop/specials?pg=1"
+    store: "New World"
   },
   woolworths: {
-    store: "Woolworths",
-    specialsUrl: "https://www.woolworths.co.nz/shop/specials"
+    store: "Woolworths"
   }
 };
 
@@ -95,7 +93,7 @@ export class ScreenshotIngestionService {
         storeKey,
         name,
         price: Number(price.toFixed(2)),
-        url: storeMeta.specialsUrl,
+        url: buildStoreSearchUrl(storeKey, name),
         categoryHint: "screenshot-upload"
       });
     }

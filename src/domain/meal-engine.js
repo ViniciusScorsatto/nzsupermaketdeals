@@ -11,8 +11,8 @@ function capitalizePhrase(value) {
     .join(" ");
 }
 
-function scoreMeal({ totalPrice, budget, protein, carb, vegetable }) {
-  const budgetGap = budget - totalPrice;
+function scoreMeal({ totalPrice, preset, protein, carb, vegetable }) {
+  const budgetGap = preset.maxBudgetInclusive - totalPrice;
   const shortNamePenalty = [protein, carb, vegetable]
     .map((item) => item.name.trim().length)
     .filter((length) => length < 4).length;
@@ -36,7 +36,10 @@ export function generateMeals(products, preset) {
         const storeNames = new Set([protein.store, carb.store, vegetable.store]);
         const totalPrice = roundMoney(protein.price + carb.price + vegetable.price);
 
-        if (totalPrice > preset.budget) {
+        if (
+          totalPrice <= preset.minBudgetExclusive ||
+          totalPrice > preset.maxBudgetInclusive
+        ) {
           continue;
         }
 
@@ -44,8 +47,11 @@ export function generateMeals(products, preset) {
           presetId: preset.id,
           title: buildMealName({ protein, carb, vegetable }),
           totalPrice,
-          budget: preset.budget,
-          score: scoreMeal({ totalPrice, budget: preset.budget, protein, carb, vegetable }),
+          budgetRange: {
+            minExclusive: preset.minBudgetExclusive,
+            maxInclusive: preset.maxBudgetInclusive
+          },
+          score: scoreMeal({ totalPrice, preset, protein, carb, vegetable }),
           store: storeNames.size === 1 ? protein.store : "Mixed",
           ingredients: [protein, carb, vegetable],
           recipePrompt: `Create a simple 3 to 5 step dinner recipe using ${protein.name}, ${carb.name}, and ${vegetable.name}. Keep it practical for everyday New Zealand households.`

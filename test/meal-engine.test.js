@@ -11,12 +11,32 @@ const products = [
 ];
 
 test("generateMeals respects the selected budget", () => {
-  const meals = generateMeals(products, { id: "under_10", label: "Under $10", budget: 10 });
+  const meals = generateMeals(products, {
+    id: "under_10",
+    label: "Under $10",
+    minBudgetExclusive: 0,
+    maxBudgetInclusive: 10
+  });
   assert.ok(meals.length > 0);
-  assert.ok(meals.every((meal) => meal.totalPrice <= 10));
+  assert.ok(meals.every((meal) => meal.totalPrice > 0 && meal.totalPrice <= 10));
+});
+
+test("generateMeals enforces budget brackets", () => {
+  const meals = generateMeals(products, {
+    id: "budget_10_20",
+    label: "$10-$20",
+    minBudgetExclusive: 10,
+    maxBudgetInclusive: 20
+  });
+  assert.ok(meals.every((meal) => meal.totalPrice > 10 && meal.totalPrice <= 20));
 });
 
 test("generateMeals sorts by deterministic score and price", () => {
-  const meals = generateMeals(products, { id: "under_10", label: "Under $10", budget: 10 });
+  const meals = generateMeals(products, {
+    id: "under_10",
+    label: "Under $10",
+    minBudgetExclusive: 0,
+    maxBudgetInclusive: 10
+  });
   assert.equal(meals[0].title, "Chicken Thighs with Rice and Carrots");
 });
