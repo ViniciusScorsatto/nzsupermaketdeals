@@ -48,9 +48,11 @@ export async function refreshDeals({
         });
 
         normalizedProducts.push(...classifiedProducts);
+        const eligibleCount = classifiedProducts.filter(isEligibleMealProduct).length;
         summary.stores[scraper.storeKey] = {
           status: "success",
-          productsFound: classifiedProducts.length
+          rawProductsFound: classifiedProducts.length,
+          eligibleProductsFound: eligibleCount
         };
       } catch (error) {
         summary.stores[scraper.storeKey] = {

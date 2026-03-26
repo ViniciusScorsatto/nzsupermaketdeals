@@ -13,6 +13,26 @@ function isAdmin(config, userId) {
   return config.telegramAdminIds.includes(Number(userId));
 }
 
+function buildRefreshSummary(result) {
+  const lines = [
+    "Refresh complete.",
+    `Products processed: ${result.summary.productsProcessed}`,
+    `Meals generated: ${result.summary.mealsGenerated}`
+  ];
+
+  for (const [storeKey, storeSummary] of Object.entries(result.summary.stores ?? {})) {
+    if (storeSummary.status === "success") {
+      lines.push(
+        `${storeKey}: raw ${storeSummary.rawProductsFound}, eligible ${storeSummary.eligibleProductsFound}`
+      );
+    } else {
+      lines.push(`${storeKey}: error - ${storeSummary.message}`);
+    }
+  }
+
+  return lines.join("\n");
+}
+
 export function createBot({ config, pool, refreshDeals }) {
   const bot = new Bot(config.telegramBotToken);
   let activeRefreshPromise = null;
@@ -60,10 +80,7 @@ export function createBot({ config, pool, refreshDeals }) {
         const result = await refreshDeals();
 
         if (chatId) {
-          await bot.api.sendMessage(
-            chatId,
-            `Refresh complete.\nProducts processed: ${result.summary.productsProcessed}\nMeals generated: ${result.summary.mealsGenerated}`
-          );
+          await bot.api.sendMessage(chatId, buildRefreshSummary(result));
         }
       } catch (error) {
         console.error("Refresh job failed", error);
