@@ -25,6 +25,7 @@ const screenshotIngestionService = new ScreenshotIngestionService({
 
 const scrapers = buildScrapers({
   storeUrls: config.storeUrls,
+  storeApis: config.storeApis,
   userAgent: config.scrapeUserAgent
 });
 

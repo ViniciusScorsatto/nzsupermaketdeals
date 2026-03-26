@@ -8,7 +8,9 @@ export function buildStartMessage() {
   return [
     "Affordable meals from NZ supermarket specials.",
     "",
-    "Choose your budget and I will find the best meal ideas from today's deals."
+    "Choose your budget and I will find the best meal ideas from today's deals.",
+    "",
+    "Prices can vary a bit by store, location, and timing."
   ].join("\n");
 }
 
@@ -44,6 +46,7 @@ export function buildMealResponse(preset, meals) {
         `Budget: ${preset.label}`,
         `Total: <b>${formatMoney(meal.totalPrice)}</b>`,
         `Store: ${meal.store}`,
+        "Note: prices can vary by store location and timing.",
         "",
         "<b>Ingredients</b>",
         ingredients,

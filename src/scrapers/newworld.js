@@ -1,9 +1,11 @@
-import { BaseStoreScraper } from "./base.js";
+import { FoodstuffsApiScraper } from "./shared-foodstuffs.js";
 
-export class NewWorldScraper extends BaseStoreScraper {
-  async scrape() {
-    const html = await this.fetchHtml();
-    const $ = this.load(html);
-    return this.scrapeLinkedProducts($);
+export class NewWorldScraper extends FoodstuffsApiScraper {
+  constructor(options) {
+    super({
+      ...options,
+      storeKey: "newworld",
+      storeName: "New World"
+    });
   }
 }

@@ -4,7 +4,7 @@ Hosted `Node.js` Telegram bot for affordable NZ supermarket meal ideas, designed
 
 ## What it does
 
-- Scrapes specials from `Pak'nSave`, `New World`, and `Woolworths`
+- Fetches specials from `Pak'nSave`, `New World`, and `Woolworths`
 - Normalizes products into shared categories: `protein`, `carb`, `vegetable`, `other`
 - Builds conservative `1 protein + 1 carb + 1 vegetable` meal combinations
 - Ranks meals for `Under $10`, `Under $15`, `Under $20`, and `Under $25`
@@ -67,7 +67,7 @@ npm run db:check
 
 ## Notes
 
-- The scraper selectors are heuristic and intentionally isolated per store.
+- The live store integrations prefer structured store APIs when available.
 - If a store parser fails, other stores can still produce meals.
 - If `OPENAI_API_KEY` is missing, recipe generation falls back to deterministic template steps.
 
