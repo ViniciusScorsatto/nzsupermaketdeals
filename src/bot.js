@@ -15,6 +15,7 @@ function isAdmin(config, userId) {
 
 export function createBot({ config, pool, refreshDeals }) {
   const bot = new Bot(config.telegramBotToken);
+  let activeRefreshPromise = null;
 
   bot.use(async (ctx, next) => {
     await upsertTelegramUser(pool, ctx.from);
@@ -46,9 +47,37 @@ export function createBot({ config, pool, refreshDeals }) {
       return;
     }
 
+    if (activeRefreshPromise) {
+      await ctx.reply("A refresh is already running. I will send the summary here when it finishes.");
+      return;
+    }
+
     await ctx.reply("Refreshing deals and rebuilding meals. This can take a moment.");
-    const result = await refreshDeals();
-    await ctx.reply(`Refresh complete.\nProducts processed: ${result.summary.productsProcessed}\nMeals generated: ${result.summary.mealsGenerated}`);
+
+    const chatId = ctx.chat?.id;
+    activeRefreshPromise = (async () => {
+      try {
+        const result = await refreshDeals();
+
+        if (chatId) {
+          await bot.api.sendMessage(
+            chatId,
+            `Refresh complete.\nProducts processed: ${result.summary.productsProcessed}\nMeals generated: ${result.summary.mealsGenerated}`
+          );
+        }
+      } catch (error) {
+        console.error("Refresh job failed", error);
+
+        if (chatId) {
+          await bot.api.sendMessage(
+            chatId,
+            `Refresh failed.\n${error.message}`
+          );
+        }
+      } finally {
+        activeRefreshPromise = null;
+      }
+    })();
   });
 
   bot.callbackQuery(/^preset:(.+)$/, async (ctx) => {
