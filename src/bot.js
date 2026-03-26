@@ -105,6 +105,10 @@ export function createBot({ config, pool, refreshDeals }) {
 
   return {
     bot,
-    callback: webhookCallback(bot, "express")
+    callback: webhookCallback(bot, "express", {
+      onTimeout: "return",
+      timeoutMilliseconds: 10_000,
+      secretToken: config.telegramWebhookSecret
+    })
   };
 }
