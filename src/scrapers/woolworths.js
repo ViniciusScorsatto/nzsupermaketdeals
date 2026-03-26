@@ -24,8 +24,7 @@ export class WoolworthsScraper extends BaseStoreScraper {
 
     const data = await response.json();
     const products = data.products?.items ?? data.products?.products ?? [];
-
-    return products
+    const normalizedProducts = products
       .map((product) => {
         const name = product.name?.trim();
         const price = Number(product.price?.salePrice ?? product.price?.currentPrice ?? product.price?.originalPrice);
@@ -44,5 +43,14 @@ export class WoolworthsScraper extends BaseStoreScraper {
         };
       })
       .filter(Boolean);
+
+    return {
+      products: normalizedProducts,
+      diagnostics: {
+        apiProductCount: Array.isArray(products) ? products.length : 0,
+        topLevelKeys: Object.keys(data).slice(0, 8),
+        productKeys: products[0] ? Object.keys(products[0]).slice(0, 8) : []
+      }
+    };
   }
 }

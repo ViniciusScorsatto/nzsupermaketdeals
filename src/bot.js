@@ -26,6 +26,9 @@ function buildRefreshSummary(result) {
       lines.push(
         `${storeKey}: raw ${storeSummary.rawProductsFound}, eligible ${storeSummary.eligibleProductsFound}`
       );
+      if (storeSummary.diagnostics) {
+        lines.push(`${storeKey} debug: ${JSON.stringify(storeSummary.diagnostics)}`);
+      }
     } else {
       lines.push(`${storeKey}: error - ${storeSummary.message}`);
     }

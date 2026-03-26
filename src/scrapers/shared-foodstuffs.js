@@ -78,8 +78,7 @@ export class FoodstuffsApiScraper extends BaseStoreScraper {
 
     const data = await response.json();
     const products = data.products ?? [];
-
-    return products
+    const normalizedProducts = products
       .map((product) => {
         const name = product.name?.trim();
         const price = centsToDollars(product.singlePrice?.price);
@@ -101,5 +100,14 @@ export class FoodstuffsApiScraper extends BaseStoreScraper {
         };
       })
       .filter(Boolean);
+
+    return {
+      products: normalizedProducts,
+      diagnostics: {
+        apiProductCount: Array.isArray(products) ? products.length : 0,
+        firstKeys: products[0] ? Object.keys(products[0]).slice(0, 8) : [],
+        payloadFilter: this.promotionFilter
+      }
+    };
   }
 }
