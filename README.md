@@ -38,6 +38,12 @@ npm run webhook:register
 npm run job:daily
 ```
 
+6. Check Postgres connectivity explicitly if you are using Railway Postgres from your own machine:
+
+```bash
+npm run db:check
+```
+
 ## Railway deployment
 
 - Deploy this repo as a `Node.js` service on `Railway`
@@ -55,9 +61,37 @@ npm run job:daily
 - `/start` shows budget presets
 - `/today` shows the featured daily meal
 - `/refresh_deals` refreshes product data and regenerates meals for admins only
+- `/upload_paknsave`, `/upload_newworld`, `/upload_woolworths` start screenshot ingestion for a store
+- send screenshot images to the bot, then run `/finish_upload`
+- `/cancel_upload` clears the current screenshot session
 
 ## Notes
 
 - The scraper selectors are heuristic and intentionally isolated per store.
 - If a store parser fails, other stores can still produce meals.
 - If `OPENAI_API_KEY` is missing, recipe generation falls back to deterministic template steps.
+
+## Screenshot ingestion mode
+
+If supermarket sites block hosted scraping, admins can upload deal screenshots directly to the bot:
+
+1. Run `/upload_paknsave`, `/upload_newworld`, or `/upload_woolworths`
+2. Send one or more screenshots
+3. Run `/finish_upload`
+
+The bot will use vision extraction, save products to Postgres, and generate meals from those uploaded deals.
+
+## Local scraper mode
+
+If supermarket sites block Railway IPs, keep the bot hosted on Railway and run the scraper locally against the same `DATABASE_URL`.
+
+Useful commands:
+
+```bash
+npm run db:check
+npm run job:local
+```
+
+Detailed setup:
+
+- [Local scraper + Railway Postgres](/Users/viniciusscorsatto/Desktop/AI Projects/NZ Supermarket Deals Bot/docs/local-scraper-cron.md)
